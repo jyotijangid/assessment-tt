@@ -1,4 +1,4 @@
-#####  Problem Statement
+####  Problem Statement
 To run a http server inside a Docker container in an EC2 server which returns a list of all EC2s running in a region in an AWS account along with their corresponding IPs and Tags when called on the `/ec2` path.
 Inside the EC2, run your application inside a docker container and expose the application on port 8000.
 
@@ -21,7 +21,9 @@ Make a terraform module or CDK construct which takes values like EC2 instance ty
 5. Run a nginx-server app that is exposed on port 8000 of host & returns all running ec2 instances in the region on `/ec2` path. 
 6. Created a cronjob on host instances that will run every min and update the running-ec2 instances in the index.html. Mount this index.html files on the Nginx-server conatiner.
 
-#### Insert the solution architecture image
+##### Architecture
+![image](https://user-images.githubusercontent.com/71806907/172694519-9d5caa89-9159-45b1-a64c-442330c2eb72.png)
+
 ### Step-1: 
 
 ##### Terraform setup:
@@ -76,6 +78,11 @@ sh /files/ec2-out.sh
 # add --check in the end to just test the configuration on remote machine & not run
 anisble-playbook <location to playbook.yaml> 
 ```
+##### Working URLs
+
+![smallcase tickler in](https://user-images.githubusercontent.com/71806907/172694708-9035ea24-7a5e-498e-94c9-7476bd5ddd4e.PNG)
+
+![smallcase tickler in ec2](https://user-images.githubusercontent.com/71806907/172694730-80b979f4-1fba-4c3e-a413-689fcce2bf67.PNG)
 
 
 #### Problems faced
