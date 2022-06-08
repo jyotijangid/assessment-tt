@@ -1,0 +1,130 @@
+# ---------------------------- Install, Configure Server & Application using Docker ---------------
+---
+
+- name: Install & Configure Docker, AWS-cli, Nginx-server
+  hosts: servers
+  become: true
+  become_user: root
+
+  tasks:
+
+#   Install packages
+    - name: Install pre-requisite packages
+      apt:
+          name: "{{item}}"
+          state: latest
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+
+#   Adding GPG key  
+    - name: add GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+#   Add docker Repo & install Docker
+    - name: add docker repository to apt
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: install docker
+      apt:
+        name: "{{item}}"
+        state: latest
+        update_cache: yes
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+#   Install dependencies 
+    - name: Install package dependencies.
+      package: name={{ item }} state=present
+      with_items:
+        - python3
+        - python3-pip
+        - unzip
+
+#   Install docker remote API
+    - name: Installing python library for the Docker Remote API
+      pip:
+        name: docker-py
+
+#   Installing AWS-cli bundle
+    - name: Download the awscli bundle.
+      get_url: url=https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip dest=/tmp/awscli-exe-linux-x86_64.zip
+      register: aws_cli_download_bundle
+
+    - name: Unarchive the installer.
+      unarchive: src=/tmp/awscli-exe-linux-x86_64.zip dest=/root/ copy=no creates=/tmp/awscli-exe
+      register: aws_cli_unarchive_installer
+
+    - name: Install awscli package.
+      shell: sh /root/aws/install --update
+      args:
+        creates: /usr/bin/aws
+
+#   configure aws secret-keys as environment variables
+    - name: Configure AWS.
+      shell: aws configure set {{ item.key }} {{ item.value }} 
+      no_log: True
+      with_dict:
+        aws_access_key_id: "{{ aws_access_key }}"
+        aws_secret_access_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+
+#   Creating directories & copying files
+    - name: Make directory
+      shell: mkdir -p /usr/local/nginx/ec2/
+
+    - name: Copy files
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      with_items:
+         - { src: '/home/ubuntu/assessment/files/index.html', dest: '/usr/local/nginx', owner: 'root', group: 'root', mode: 644 }
+         - { src: '/home/ubuntu/assessment/files/ec2-out.sh', dest: '/root', owner: 'root', group: 'root', mode: 755 }
+
+#   Create cronjob to update /ec2
+    - name: Cronjob
+      cron:
+        name: "creating cronjob to update /ec2 path"
+        user: root
+        state: present
+        minute: "*/1"
+        hour: "*"
+        day: "*"
+        month: "*"
+        weekday: "*"
+        job: "/bin/sh /root/ec2-out.sh"
+
+
+#   Docker start
+    - name: Start service docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+#   Docker run nginx-app conatiner
+    - name: Create a Nginx Web container
+      docker_container:
+        name: nginx-app
+        image: nginx:latest
+        ports:
+          - "80:80"
+          - "8000:80"
+        volumes:
+          - /usr/local/nginx:/usr/share/nginx/html
+      register: status
+
+    - debug:
+        var: status
