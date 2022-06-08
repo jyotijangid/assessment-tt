@@ -1,4 +1,4 @@
-####  Problem Statement
+####  Problem Statement:
 To run a http server inside a Docker container in an EC2 server which returns a list of all EC2s running in a region in an AWS account along with their corresponding IPs and Tags when called on the `/ec2` path.
 Inside the EC2, run your application inside a docker container and expose the application on port 8000.
 
@@ -24,7 +24,7 @@ Make a terraform module or CDK construct which takes values like EC2 instance ty
 ##### Architecture
 ![image](https://user-images.githubusercontent.com/71806907/172694519-9d5caa89-9159-45b1-a64c-442330c2eb72.png)
 
-### Step-1: 
+#### Step-1: 
 
 ##### Terraform setup:
 ```bash
@@ -53,7 +53,7 @@ sudo ./aws/install
 aws configure
 ```
 
-### Step-2: 
+#### Step-2: 
 
 Provisioning resources in AWS & configuring the remote hosts using Terraform & Ansible: 
 ```bash
@@ -85,17 +85,17 @@ anisble-playbook <location to playbook.yaml>
 ![smallcase tickler in ec2](https://user-images.githubusercontent.com/71806907/172694730-80b979f4-1fba-4c3e-a413-689fcce2bf67.PNG)
 
 
-#### Problems faced
+##### Problems faced
 
 1. Configuring target group port & instance traffic port using terraform.
 2. Attach roles to launch configuration.
 
-### Further Steps 
+#### Further Steps 
 1. Setup a cronjob on local so that everytime a instance is not healthy & asg replaces it we run the terraform module runs but only for with the recent changes.
 2. Creation of AMI of pre-configured instances that will be new version of launch-template.
 
 
-###### NOTE
+#### NOTE
 * Just for reference `terraform.tfvars` is added, generally the file is added in `.gitignore`.
 * In order to take input for variables like ami, volume, no. of ec2s, DNS name, instance-type remove the default values in `variable.tf`
 
