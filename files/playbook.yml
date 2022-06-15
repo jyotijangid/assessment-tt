@@ -120,7 +120,6 @@
         name: nginx-app
         image: nginx:latest
         ports:
-          - "80:80"
           - "8000:80"
         volumes:
           - /usr/local/nginx:/usr/share/nginx/html
