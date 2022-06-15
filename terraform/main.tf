@@ -2,7 +2,7 @@
 
 # --------------------- EC2 security group ----------------------
 locals {
-  ports_in  = [22, 8000, 80]
+  ports_in  = [8000, 80]
   ports_out = [0]
 }
 
