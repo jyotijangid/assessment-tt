@@ -87,13 +87,12 @@ anisble-playbook <location to playbook.yaml>
 
 ##### Problems faced
 
-1. Configuring target group port & instance traffic port using terraform.
-2. Attach roles to launch configuration.
+1. Attach roles to launch configuration.
 
 #### Further Steps 
 1. Setup a cronjob on local so that everytime a instance is not healthy & asg replaces it we run the terraform module runs but only for with the recent changes.
 2. Creation of AMI of pre-configured instances that will be new version of launch-template.
-
+3. Attaching load balancer security group instead of 0.0.0.0 on EC2 instances.
 
 #### NOTE
 * Just for reference `terraform.tfvars` is added, generally the file is added in `.gitignore`.
