@@ -177,7 +177,7 @@ resource "null_resource" "get_hosts_ips" {
   }
   provisioner "local-exec" {
     command     = <<-EOT
-      /home/ubuntu/assessment/terraform-files/get-host-ip.sh us-east-2 Nginx-ASG
+      /home/ubuntu/assessment/terraform-files/get-host-ip.sh ${var.aws_region} ${aws_autoscaling_group.auto_scaling_group.name}
     EOT
     interpreter = ["/bin/bash", "-c"]
   }
