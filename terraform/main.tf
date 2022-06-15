@@ -2,7 +2,7 @@
 
 # --------------------- EC2 security group ----------------------
 locals {
-  ports_in  = [8000, 80]
+  ports_in  = [22, 8000, 80]
   ports_out = [0]
 }
 
@@ -125,7 +125,7 @@ resource "aws_lb" "load_balancer" {
 resource "aws_lb_target_group" "lb_target_group" {
   #   depends_on  = [aws_autoscaling_group.auto_scaling_group]
   name        = "Nginx-TG"
-  port        = 80
+  port        = 8000
   protocol    = "HTTP"
   target_type = "instance"
   vpc_id      = var.vpc_id_
