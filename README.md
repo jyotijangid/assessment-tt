@@ -95,7 +95,7 @@ anisble-playbook <location to playbook.yaml>
 3. Attaching load balancer security group instead of 0.0.0.0 on EC2 instances.
 
 #### NOTE
-* Just for reference `terraform.tfvars` is added, generally the file is added in `.gitignore`.
+* `terraform.tfvars` is added just for reference, the file is generally added in `.gitignore`.
 * In order to take input for variables like ami, volume, no. of ec2s, DNS name, instance-type remove the default values in `variable.tf`
 
 
